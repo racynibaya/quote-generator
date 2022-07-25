@@ -1,18 +1,22 @@
 const author = document.querySelector('.quote-author');
-const quote = document.querySelector('.quote-text');
+const quoteText = document.querySelector('.quote-text');
 
 const generate = document.getElementById('new-quote');
 
 // Get quotes from API
 async function getQuotes() {
-  const quotes = await fetch('https://type.fit/api/quotes');
-  const data = await quotes.json();
+  try {
+    const response = await fetch('https://type.fit/api/quotes');
 
-  const obj = data[Math.floor(Math.random() * data.length)];
+    const quote = await response.json();
 
-  console.log(obj);
-  quote.children[1].textContent = obj.text;
-  author.children[0].textContent = obj.author;
+    const obj = quote[Math.floor(Math.random() * quote.length)];
+
+    quoteText.children[1].textContent = obj.text;
+    author.children[0].textContent = obj.author;
+  } catch (error) {
+    // Catch error here
+  }
 }
-
+getQuotes();
 generate.addEventListener('click', getQuotes);
