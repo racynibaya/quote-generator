@@ -1,22 +1,48 @@
-const author = document.querySelector('.quote-author');
-const quoteText = document.querySelector('.quote-text');
+const quoteText = document.getElementById('quote');
+const author = document.getElementById('author');
+const twitterBtn = document.getElementById('twitter');
+const newQuoteBtn = document.getElementById('new-quote');
 
-const generate = document.getElementById('new-quote');
+let quote;
+// Generate new quote
+function generateQuote(data) {
+  quote = data[Math.floor(Math.random() * data.length)];
+
+  // Check if author field is blank
+
+  quote.author
+    ? (author.textContent = quote.author)
+    : (author.textContent = 'Unknown');
+
+  quote.text.length > 120
+    ? quoteText.classList.add('long-quote-text')
+    : quoteText.classList.remove('long-quote-text');
+  console.log(quote.text.length);
+  quoteText.textContent = quote.text;
+}
 
 // Get quotes from API
-async function getQuotes() {
+async function getQuotesData() {
   try {
     const response = await fetch('https://type.fit/api/quotes');
-
-    const quote = await response.json();
-
-    const obj = quote[Math.floor(Math.random() * quote.length)];
-
-    quoteText.children[1].textContent = obj.text;
-    author.children[0].textContent = obj.author;
+    const data = await response.json();
+    generateQuote(data);
   } catch (error) {
     // Catch error here
   }
 }
-getQuotes();
-generate.addEventListener('click', getQuotes);
+
+function tweetQuote() {
+  // query string
+  const tweetURL = `https://twitter.com/intent/tweet?text=${quote.text}
+  - ${quote.author}`;
+
+  window.open(tweetURL, '_blank');
+}
+
+// On load
+getQuotesData();
+
+// On Click
+newQuoteBtn.addEventListener('click', getQuotesData);
+twitterBtn.addEventListener('click', tweetQuote);
