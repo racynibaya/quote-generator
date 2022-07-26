@@ -12,7 +12,7 @@ function generateQuote(data) {
 
   quote.author
     ? (author.textContent = quote.author)
-    : (author.textContent = 'Unknown');
+    : (author.textContent = '- Unknown');
 
   quote.text.length > 120
     ? quoteText.classList.add('long-quote-text')
